@@ -18,7 +18,7 @@ root.render(
     <Provider store={store}>
         <BrowserRouter>
             <Routes>
-                <Route path="/" element={<MainPage/>}/>
+                <Route path="/" element={<App/>}/>
                 <Route path="index">
                     <Route path=":title" element={<ChartPage/>}/>
                 </Route>

@@ -6,6 +6,7 @@ import Typography from '@mui/material/Typography';
 import {useNavigate} from "react-router-dom";
 import axios from "axios";
 import {useSelector} from "react-redux";
+import {Grid} from "@mui/material";
 
 
 
@@ -19,8 +20,9 @@ function DenseTable() {
 
     return (
         dataObject.map((dataset: any, index: number) => (
-                    <Box sx={{width: 200, height: 150}}>
-                        <Card variant="outlined" sx={{backgroundColor: "rgb(30, 81, 40)"}} onClick={() => { navigator(dataset.title) }}>
+
+                    <Box sx={{width: 400, Height: 200}}>
+                        <Card variant="outlined" sx={{backgroundColor: "rgb(30, 81, 40)", width: 400, minHeight: 200}} onClick={() => { navigator(dataset.title) }}>
                             <React.Fragment>
 
                                 <CardContent>
@@ -34,6 +36,7 @@ function DenseTable() {
                             </React.Fragment>
                         </Card>
                     </Box>
+
             ))
     );
 }

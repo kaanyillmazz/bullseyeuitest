@@ -1,0 +1,20 @@
+.logoLabel {
+    font-family: Georgia, serif;
+    color: whitesmoke;
+    font-size: xxx-large;
+    font-variant: all-small-caps;
+    font-weight: bold;
+    transition: all 5s;
+    margin-bottom: 7px;
+}
+
+.companyLabel {
+    font-family: Georgia, serif;
+    color: whitesmoke;
+    font-size: xxx-large;
+    font-variant: all-small-caps;
+    font-weight: bold;
+    transition: all 5s;
+    margin-bottom: 7px;
+    margin-inline-start: 3vw;
+}
