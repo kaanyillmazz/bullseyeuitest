@@ -5,3 +5,11 @@
     top: 0;
     bottom: 0;
 }
+
+.lineChart {
+    background-color: rgb(233, 234, 226);
+}
+.dataTable {
+    background-color: rgb(233, 234, 226);
+
+}
