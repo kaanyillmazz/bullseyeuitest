@@ -51,18 +51,25 @@ let rows = [
     TableData('NYSE Arca Oil Index', "NYSE", 16.0, 49, 3.9),
 ];
 
+function convertTime(timestamp:string) {
+    const date = new Date(parseInt(timestamp));
+    let result = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate() + "-" + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds()
+    return result
+}
+
 function MainPage() {
-    let BaseURL = "https://query1.finance.yahoo.com/v7/finance/quote?symbols=CARR,CTLT,CAT,CBOE,CBRE,CDW,CE,CNC,CNP,CDAY,CERN,CF,CRL,CHTR,CVX,CMG,CB,CHD,CI,CINF,CTAS,CSCO,C,CFG,CTXS,CLX,CME,CMS,CTSH,CL,CMCSA,CMA,CAG,COP,COO,CPRT,CTVA,COST,CTRA,CCI,CSX,CMI,CVS,CRM,DHI,DHR,DRI,DVA,DE,DAL,DVN,DXCM,DLR,DFS,DISCA,DISCK,DISH,DG,DLTR,D,DPZ,DOV,DOW,DTE,DUK,DRE,DD,DXC,DGX,DIS,ED,EMN,ETN,EBAY,ECL,EIX,EW,EA,EMR,ENPH,ETR,EOG,EFX,EQIX,EQR,ESS,EL,ETSY,EVRG,ES,EXC,EXPE,EXPD,EXR,FANG,FFIV,FB,FAST,FRT,FDX,FIS,FITB,FE,FRC,FISV,FLT,FMC,F,FTNT,FTV,FBHS,FOXA,FOX,FCX,GOOGL,GOOG,GLW,GPS,GRMN,GNRC,GD,GE,GIS,GM,GPC,GILD,GL,GPN,GS,GWW,HAL,HBI,HIG,HAS,HCA,HSIC,HSY,HES,HPE,HLT,HOLX,HD,HON,HRL,HST,HWM,HPQ,HUM,HBAN,HII,IT,IEX,IDXX,INFO,ITW,ILMN,INCY,IR,INTC,ICE,IBM,IP,IPG,IFF,INTU,ISRG,IVZ,IPGP,IQV,IRM,JKHY,J,JBHT,JNJ,JCI,JPM,JNPR,KMX,KO,KSU";
+    let BaseURL = "http://localhost:8080/Indices/S&P%20500";
     let empSal: any = [];
     let empAge: any = [];
 
     const [userData, setUserData] = useState({
             labels: empSal,
+            type: 'line',
             datasets: [
                 {
                     label: "Index Values",
                     data: empAge,
-                    borderColor: "red",
+                    borderColor: 'rgb(40, 84, 48)',
                     borderWidth: 1,
                     radius: 0,
                 },
@@ -75,6 +82,11 @@ function MainPage() {
                     legend: false
                 },
                 scales: {
+                    xAxes: [{
+                        ticks: {
+                            maxTicksLimit: 5
+                        }
+                    }],
                     x: {
                         type: 'linear'
                     }
@@ -89,18 +101,19 @@ function MainPage() {
 
         axios.get(BaseURL)
             .then(res => {
-                for (const dataObj of res.data.quoteResponse.result) {
-                    empSal.push(parseInt(dataObj.postMarketTime));
-                    empAge.push(parseInt(dataObj.marketCap));
+                for (const dataObj of res.data.response) {
+                    empSal.push(convertTime(dataObj.Timestamp));
+                    empAge.push(dataObj.Value);
                 }
 
                 setUserData({
                     labels: empSal,
+                    type: 'line',
                     datasets: [
                         {
                             label: "Index Values",
                             data: empAge,
-                            borderColor: "red",
+                            borderColor: 'rgb(40, 84, 48)',
                             borderWidth: 1,
                             radius: 0,
                         },
@@ -113,6 +126,11 @@ function MainPage() {
                             legend: false
                         },
                         scales: {
+                            xAxes: [{
+                                ticks: {
+                                    maxTicksLimit: 5
+                                }
+                            }],
                             x: {
                                 type: 'linear'
                             }
@@ -135,7 +153,7 @@ function MainPage() {
     function DataTable() {
         const indexSetter = (indexTitle: string) => {
             //TODO title alip ona gore chart degisicek
-            BaseURL = "https://query1.finance.yahoo.com/v7/finance/quote?symbols=ABT,AZO,AVB,AVY,AVGO,BKR,BLL,BAC,BBWI,BAX,BDX,BBY,BIO,BIIB,BLK,BK,BA,BKNG,BWA,BXP,BSX,BMY,BR,BRO,BEN,CHRW,CDNS,CZR,CPB,COF,CAH,CCL"
+            BaseURL = "http://localhost:8080/Indices/S&P%20500"
             Chart();
         }
 
