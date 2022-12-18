@@ -35,20 +35,17 @@ ChartJS.register(
 
 function TableData(
     name: string,
-    symbol: string,
-    high: number,
-    low: number,
     value: number,
 ) {
-    return {name, symbol, high, low, value};
+    return {name, value};
 }
 
 let rows = [
-    TableData('S&P 500', "SP", 24, 24, 4.0),
-    TableData('Dow Jones Industrial Average', "DOW", 9.0, 37, 4.3),
-    TableData('Russell 2000', "RSSL", 16.0, 24, 6.0),
-    TableData('Nasdaq Composite', "NSDQ", 3.7, 67, 4.3),
-    TableData('NYSE Arca Oil Index', "NYSE", 16.0, 49, 3.9),
+    TableData('S&P 500',  4.0),
+    TableData('Dow Jones Industrial Average',   4.3),
+    TableData('Russell 2000',  6.0),
+    TableData('Nasdaq Composite',   4.3),
+    TableData('NYSE Arca Oil Index',  3.9),
 ];
 
 function convertTime(timestamp:string) {
@@ -61,6 +58,35 @@ function MainPage() {
     let BaseURL = "http://localhost:8080/Indices/S&P%20500";
     let empSal: any = [];
     let empAge: any = [];
+
+
+    const [tableData, setTableData] = useState(
+            [
+                TableData('S&P 500', 0),
+                TableData('Dow Jones Industrial Average',0),
+                TableData('Russell 2000',  0),
+                TableData('Nasdaq Composite',   0),
+                TableData('NYSE Arca Oil Index',   0)
+]
+    );
+
+
+    const drawTable = () => {
+        //TODO axios get every value
+        //TODO set every value
+
+        let value1 = 0;
+        let value2 = 1;
+        let value3 = 2;
+        let value4 = 3;
+        let value5 = 4;
+        setTableData([
+            TableData('S&P 500',  value1),
+            TableData('Dow Jones Industrial Average',  value2),
+            TableData('Russell 2000',  value3),
+            TableData('Nasdaq Composite',  value4),
+            TableData('NYSE Arca Oil Index',   value5)]);
+    }
 
     const [userData, setUserData] = useState({
             labels: empSal,
@@ -147,14 +173,17 @@ function MainPage() {
 
     useEffect(() => {
         Chart();
+        drawTable();
     }, []);
 
 
     function DataTable() {
         const indexSetter = (indexTitle: string) => {
-            //TODO title alip ona gore chart degisicek
+            //TODO check indexTitle
+            //TODO set baseURL accordingly
             BaseURL = "http://localhost:8080/Indices/S&P%20500"
             Chart();
+            drawTable();
         }
 
         return (
@@ -163,7 +192,6 @@ function MainPage() {
                     <TableHead>
                         <TableRow>
                             <TableCell>Name</TableCell>
-                            <TableCell align="right">Symbol</TableCell>
                             <TableCell align="right">Value</TableCell>
                         </TableRow>
                     </TableHead>
@@ -178,7 +206,6 @@ function MainPage() {
                                 }} component="th" scope="row">
                                     {row.name}
                                 </TableCell>
-                                <TableCell align="right">{row.symbol}</TableCell>
                                 <TableCell align="right">{row.value}</TableCell>
                             </TableRow>
                         ))}
