@@ -42,10 +42,12 @@ function TableData(
 
 let rows = [
     TableData('S&P 500',  4.0),
-    TableData('Dow Jones Industrial Average',   4.3),
-    TableData('Russell 2000',  6.0),
-    TableData('Nasdaq Composite',   4.3),
-    TableData('NYSE Arca Oil Index',  3.9),
+    TableData('DJIA',   4.3),
+    TableData('Russell 1000',  6.0),
+    TableData('S&P 500 Equal Weight',   4.3),
+    TableData('DJIA Capped', 3.9),
+    TableData('S&P 500 Real Estate', 3.9),
+    TableData('BULL 100', 3.9)
 ];
 
 function convertTime(timestamp:string) {
@@ -62,11 +64,13 @@ function MainPage() {
 
     const [tableData, setTableData] = useState(
             [
-                TableData('S&P 500', 0),
-                TableData('Dow Jones Industrial Average',0),
-                TableData('Russell 2000',  0),
-                TableData('Nasdaq Composite',   0),
-                TableData('NYSE Arca Oil Index',   0)
+            TableData('S&P 500', 4.0),
+            TableData('DJIA', 4.3),
+            TableData('Russell 1000', 6.0),
+            TableData('S&P 500 Equal Weight', 4.3),
+            TableData('DJIA Capped', 3.9),
+            TableData('S&P 500 Real Estate', 3.9),
+            TableData('BULL 100', 3.9)
 ]
     );
 
@@ -75,17 +79,92 @@ function MainPage() {
         //TODO axios get every value
         //TODO set every value
 
-        let value1 = 0;
-        let value2 = 1;
-        let value3 = 2;
-        let value4 = 3;
-        let value5 = 4;
+        let spArray: number[] = [];
+        let djiaArray: number[] = [];
+        let russelArray: number[] = [];
+        let spewArray: number[] = [];
+        let djiacArray: number[] = [];
+        let spreArray = [];
+        let bullArray = [];
+
+        axios.get("http://localhost:8080/Indices/S&P%20500")
+            .then(res => {
+                for (const dataObj of res.data.response) {
+                    spArray.push(dataObj.Value);
+                }
+            })
+            .catch(err => {
+                    console.log(err);
+            })
+
+        axios.get("http://localhost:8080/Indices/DJIA")
+            .then(res => {
+                for (const dataObj of res.data.response) {
+                    djiaArray.push(dataObj.Value);
+                }
+            })
+            .catch(err => {
+                console.log(err);
+            })
+
+        axios.get("http://localhost:8080/Indices/Russell%201000")
+            .then(res => {
+                for (const dataObj of res.data.response) {
+                    russelArray.push(dataObj.Value);
+                }
+            })
+            .catch(err => {
+                console.log(err);
+            })
+
+        axios.get("http://localhost:8080/Indices/S&P%20500%20Equal%20Weight")
+            .then(res => {
+                for (const dataObj of res.data.response) {
+                    spewArray.push(dataObj.Value);
+                }
+            })
+            .catch(err => {
+                console.log(err);
+            })
+
+        axios.get("http://localhost:8080/Indices/DJIA%20Capped")
+            .then(res => {
+                for (const dataObj of res.data.response) {
+                    djiacArray.push(dataObj.Value);
+                }
+            })
+            .catch(err => {
+                console.log(err);
+            })
+
+        axios.get("http://localhost:8080/Indices/S&P%20500%20Real%20Estate")
+            .then(res => {
+                for (const dataObj of res.data.response) {
+                    spreArray.push(dataObj.Value);
+                }
+            })
+            .catch(err => {
+                console.log(err);
+            })
+
+        axios.get("http://localhost:8080/Indices/BULL%20100")
+            .then(res => {
+                for (const dataObj of res.data.response) {
+                    bullArray.push(dataObj.Value);
+                }
+            })
+            .catch(err => {
+                console.log(err);
+            })
+
         setTableData([
-            TableData('S&P 500',  value1),
-            TableData('Dow Jones Industrial Average',  value2),
-            TableData('Russell 2000',  value3),
-            TableData('Nasdaq Composite',  value4),
-            TableData('NYSE Arca Oil Index',   value5)]);
+            TableData('S&P 500', 4),
+            TableData('DJIA', 4.3),
+            TableData('Russell 1000', 6.0),
+            TableData('S&P 500 Equal Weight', 4.3),
+            TableData('DJIA Capped', 3.9),
+            TableData('S&P 500 Real Estate', 3.9),
+            TableData('BULL 100', 3.9)]);
     }
 
     const [userData, setUserData] = useState({
@@ -182,6 +261,21 @@ function MainPage() {
             //TODO check indexTitle
             //TODO set baseURL accordingly
             BaseURL = "http://localhost:8080/Indices/S&P%20500"
+            if (indexTitle == "S&P 500") {
+                BaseURL = "http://localhost:8080/Indices/S&P%20500"
+            } else if (indexTitle == "DJIA") {
+                BaseURL = "http://localhost:8080/Indices/DJIA"
+            } else if (indexTitle == "Russell 1000") {
+                BaseURL = "http://localhost:8080/Indices/Russell%201000"
+            } else if (indexTitle == "S&P 500 Equal Weight") {
+                BaseURL = "http://localhost:8080/Indices/S&P%20500%20Equal%20Weight"
+            } else if (indexTitle == "DJIA Capped") {
+                BaseURL = "http://localhost:8080/Indices/DJIA%20Capped"
+            } else if (indexTitle == "S&P 500 Real Estate") {
+                BaseURL = "http://localhost:8080/Indices/S&P%20500%20Real%20Estate"
+            } else if (indexTitle == "BULL 100") {
+                BaseURL = "http://localhost:8080/Indices/BULL%20100"
+            }
             Chart();
             drawTable();
         }
