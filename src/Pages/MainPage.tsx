@@ -21,6 +21,7 @@ import {
     Tooltip,
     Legend,
 } from 'chart.js'
+import { Spa } from "@mui/icons-material";
 
 
 ChartJS.register(
@@ -41,9 +42,9 @@ function TableData(
 }
 
 let rows = [
-    TableData('S&P 500',  4.0),
+    TableData('S&P 500',  5.0),
     TableData('DJIA',   4.3),
-    TableData('Russell 1000',  6.0),
+    TableData('Russell 1000',  5.0),
     TableData('S&P 500 Equal Weight',   4.3),
     TableData('DJIA Capped', 3.9),
     TableData('S&P 500 Real Estate', 3.9),
@@ -64,34 +65,41 @@ function MainPage() {
 
     const [tableData, setTableData] = useState(
             [
-            TableData('S&P 500', 4.0),
-            TableData('DJIA', 4.3),
-            TableData('Russell 1000', 6.0),
-            TableData('S&P 500 Equal Weight', 4.3),
-            TableData('DJIA Capped', 3.9),
-            TableData('S&P 500 Real Estate', 3.9),
-            TableData('BULL 100', 3.9)
+            TableData('S&P 500', 0),
+            TableData('DJIA', 0),
+            TableData('Russell 1000', 0),
+            TableData('S&P 500 Equal Weight', 0),
+            TableData('DJIA Capped', 0),
+            TableData('S&P 500 Real Estate', 0),
+            TableData('BULL 100', 0)
 ]
     );
 
+    let spArray: number[] = [];
+    let djiaArray: number[] = [];
+    let russelArray: number[] = [];
+    let spewArray: number[] = [];
+    let djiacArray: number[] = [];
+    let spreArray: number[] = [];
+    let bullArray: number[] = [];
+    let spValue: number;
+    let djiaValue: number;
+    let russelValue: number;
+    let spewValue: number;
+    let djiacValue: number;
+    let spreValue: number;
+    let bullValue: number;
 
     const drawTable = () => {
         //TODO axios get every value
-        //TODO set every value
-
-        let spArray: number[] = [];
-        let djiaArray: number[] = [];
-        let russelArray: number[] = [];
-        let spewArray: number[] = [];
-        let djiacArray: number[] = [];
-        let spreArray = [];
-        let bullArray = [];
+        //TODO set every 
 
         axios.get("http://localhost:8080/Indices/S&P%20500")
             .then(res => {
                 for (const dataObj of res.data.response) {
                     spArray.push(dataObj.Value);
                 }
+                spValue = spArray.at(spArray.length - 1) as number
             })
             .catch(err => {
                     console.log(err);
@@ -102,6 +110,7 @@ function MainPage() {
                 for (const dataObj of res.data.response) {
                     djiaArray.push(dataObj.Value);
                 }
+                djiaValue = djiaArray.at(djiaArray.length - 1) as number
             })
             .catch(err => {
                 console.log(err);
@@ -112,6 +121,7 @@ function MainPage() {
                 for (const dataObj of res.data.response) {
                     russelArray.push(dataObj.Value);
                 }
+                russelValue = russelArray.at(russelArray.length - 1) as number
             })
             .catch(err => {
                 console.log(err);
@@ -122,6 +132,7 @@ function MainPage() {
                 for (const dataObj of res.data.response) {
                     spewArray.push(dataObj.Value);
                 }
+                spewValue = spewArray.at(spewArray.length - 1) as number
             })
             .catch(err => {
                 console.log(err);
@@ -132,6 +143,7 @@ function MainPage() {
                 for (const dataObj of res.data.response) {
                     djiacArray.push(dataObj.Value);
                 }
+                djiacValue =djiacArray.at(djiacArray.length - 1) as number
             })
             .catch(err => {
                 console.log(err);
@@ -142,6 +154,7 @@ function MainPage() {
                 for (const dataObj of res.data.response) {
                     spreArray.push(dataObj.Value);
                 }
+                spreValue = spreArray.at(spreArray.length - 1) as number
             })
             .catch(err => {
                 console.log(err);
@@ -152,19 +165,22 @@ function MainPage() {
                 for (const dataObj of res.data.response) {
                     bullArray.push(dataObj.Value);
                 }
+                bullValue = bullArray.at(bullArray.length - 1) as number
             })
             .catch(err => {
                 console.log(err);
             })
+    }
 
+    const writeDataToTable = () => {
         setTableData([
-            TableData('S&P 500', 4),
-            TableData('DJIA', 4.3),
-            TableData('Russell 1000', 6.0),
-            TableData('S&P 500 Equal Weight', 4.3),
-            TableData('DJIA Capped', 3.9),
-            TableData('S&P 500 Real Estate', 3.9),
-            TableData('BULL 100', 3.9)]);
+            TableData('S&P 500', spValue),
+            TableData('DJIA', djiaValue),
+            TableData('Russell 1000', russelValue),
+            TableData('S&P 500 Equal Weight', spewValue),
+            TableData('DJIA Capped', djiacValue),
+            TableData('S&P 500 Real Estate', spreValue),
+            TableData('BULL 100', bullValue)]);
     }
 
     const [userData, setUserData] = useState({
@@ -253,8 +269,9 @@ function MainPage() {
     useEffect(() => {
         Chart();
         drawTable();
+        setTimeout(() => { writeDataToTable() }, 1000);
+        setInterval(() => { writeDataToTable() }, 5000);
     }, []);
-
 
     function DataTable() {
         const indexSetter = (indexTitle: string) => {
@@ -277,7 +294,7 @@ function MainPage() {
                 BaseURL = "http://localhost:8080/Indices/BULL%20100"
             }
             Chart();
-            drawTable();
+            //drawTable();
         }
 
         return (
@@ -290,7 +307,7 @@ function MainPage() {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {rows.map((row) => (
+                        {tableData.map((row) => (
                             <TableRow
                                 key={row.name}
                                 sx={{border: 0}}
